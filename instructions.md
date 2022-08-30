@@ -12,13 +12,19 @@ First create the virtual environment using venv, in the root of this project run
 
 Activate the virtual environment and install the dependencies:
 
-    $ ./venv/bin/activate
+    $ source ./venv/bin/activate
     $ pip3 install -r ./blog/requirements.txt
 
 ### Start the backend
 
-Now the Django server can be run with:
+Change to the blog directory:
 
     $ cd blog
-    $ python3 manage.py runserver
 
+Make the django migrations:
+
+    blog/$ python3 manage.py migrate
+
+Now the Django server can be run with:
+
+    blog/$ python3 manage.py runserver
