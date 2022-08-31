@@ -1,12 +1,13 @@
 <script setup>
     import { defineProps } from 'vue'
+    import { RouterLink } from 'vue-router'
 
     const props = defineProps(['post'])
 </script>
 
 <template>
     <li>
-        <a :href="`/posts/${post.slug}`">{{ post.title }}</a>
+        <RouterLink :to="`/post/${post.slug}`">{{ post.title }}</RouterLink>
     </li>
 </template>
     
