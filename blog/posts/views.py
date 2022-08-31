@@ -1,5 +1,13 @@
+import pathlib
+
+import markdown
+from blog.settings import BASE_DIR
+from django.http import JsonResponse
+
+from posts.markdown_helper import read_markdown_meta_data
+
 # Feel free to move this to a new file if you are carrying out the 'tags' calculation there
-stopWords = [
+STOP_WORDS = [
     "#", "##", "a", "about", "above", "after", "again", "against", "all", "am",
     "an", "and", "any", "are", "aren't", "as", "at", "be", "because", "been",
     "before", "being", "below", "between", "both", "but", "by", "can't", "cannot",
@@ -21,9 +29,28 @@ stopWords = [
     "yourself", "yourselves"
 ]
 
+
 def post(request, slug):
-    pass
+    file_path = pathlib.Path(BASE_DIR) \
+        .joinpath("../assets/posts") \
+        .joinpath(slug + '.md')
+    with file_path.open("r") as file:
+        meta_data = read_markdown_meta_data(file)
+        html = markdown.markdown(file.read())
+    meta_data["html"] = html
+    return JsonResponse(meta_data)
 
 
 def posts(request):
-    pass
+    posts = []
+
+    path = pathlib.Path(BASE_DIR).joinpath("../assets/posts")
+    for file_path in path.iterdir():
+        if file_path.is_file():
+            with file_path.open("r") as file:
+                meta_data = read_markdown_meta_data(file)
+                posts.append(meta_data)
+
+    return JsonResponse({
+        "posts": posts
+    })
