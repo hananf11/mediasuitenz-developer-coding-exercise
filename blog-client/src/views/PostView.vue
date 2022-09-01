@@ -12,7 +12,7 @@
     () => fetch(`${config.apiBaseUrl}/posts/${postSlug.value}`)
       .then(data => data.json())
       .then(json => {
-        document.title = json.title
+        document.title = `Post - ${json.title}`
         post.value = json
       })
   )

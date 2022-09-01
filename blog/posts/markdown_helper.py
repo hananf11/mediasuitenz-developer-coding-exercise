@@ -52,7 +52,7 @@ def read_markdown_meta_data(file: TextIOWrapper):
     return meta
 
 def read_markdown_tags(file: TextIOWrapper, revert_position=False):
-    """This takes a markdown file and returns the keywords from that file. 
+    """This takes a markdown file and returns the tags from that file. 
     If revert_position is True the file position will be reverted to the 
     position it was when passed into this function. """
     if revert_position:
@@ -69,7 +69,15 @@ def read_markdown_tags(file: TextIOWrapper, revert_position=False):
     for stop_word in STOP_WORDS:
         del word_count[stop_word]
 
-    tags = [word for word, count in word_count.most_common(5)]
+    # most_common_5 = word_count.most_common(5)
+    # originally I was using word_count.most_common(5) but this doesn't sort alphabetically and by the count.
+    # so i am sorted with a key function, word_count.items() => [(word, count), ...]
+    most_common_5 = sorted(
+        word_count.items(),
+        key=lambda item: (-item[1], item[0])  # sort the count descending and the word ascending 
+    )[:5] # first 5 only
+
+    tags = [word for word, count in most_common_5]
     
     if revert_position:
         file.seek(initial_position)
