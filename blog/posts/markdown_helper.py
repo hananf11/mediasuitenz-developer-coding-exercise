@@ -32,6 +32,7 @@ def read_markdown_meta_data(file: TextIOWrapper):
     """
     meta = {}
 
+    initial_position = file.tell()  # this is needed to revert the position if there is no header
     current_line = file.readline().strip()
     # check if the file begins with the opening symbol
     if current_line == "===":  
@@ -48,7 +49,7 @@ def read_markdown_meta_data(file: TextIOWrapper):
     else:
         # oops it wasn't a opening ===
         # seek back to the start of the file.
-        file.seek(0)
+        file.seek(initial_position)
     return meta
 
 def read_markdown_tags(file: TextIOWrapper, revert_position=False):
@@ -58,6 +59,11 @@ def read_markdown_tags(file: TextIOWrapper, revert_position=False):
     if revert_position:
         # save the file position for later.
         initial_position = file.tell()
+    
+    # if the meta data is not read off the file then different results will be produced
+    # just call read_markdown_meta_data to ensure the meta data is "removed", 
+    # if this has already been done it will just skip over this
+    read_markdown_meta_data(file)
     
     # read and lower all words because 'This' should be the same as 'this'
     words = file.read().lower()
