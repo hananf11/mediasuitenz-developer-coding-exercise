@@ -3,11 +3,27 @@ This is a simple blog platform that serves blog data from markdown files in `./a
 
 This project used vue.js for the client and django for the api server.
 
-# Usage
+# Usage scripts
 
-## Use the scripts
+## First time setup
 
-## Manual setup
+    $ ./setup.sh
+
+## Running the blog
+
+run-django and run-vue need to at the same time. The client (vue) will run on 8080 and the api (django) on 8000.
+
+### Django
+
+    $ ./run-django.sh
+
+### Vue 
+
+    $ ./run-vue.sh
+
+# Usage manual
+
+## First time setup
 
 ### versions
 
@@ -44,15 +60,18 @@ Install the required dependencies:
 
 To run the blog you will need to run both vue and django.
 
-### django
+### Django
 
 Make sure the virtual environment is active and you're in the blog directory.
 
     (venv) blog/$ python3 manage.py runserver localhost:8000
 
-### vue js
+### Vue
 
 In a separate terminal start the vue server, make sure you're in the blog-client folder.
-*If you aren't running django on localhost:8000 you will need to specify this in `./blog-client/src/config.js`*
 
-    blog-client/$ npm run dev
+*If you aren't running django on localhost:8000, you will need to specify this in `./blog-client/src/config.js`* 
+
+*If you aren't running vue on localhost:8080, you will need to update `CORS_ALLOWED_ORIGINS` in `./blog/blog/settings.py`*
+
+    blog-client/$ npm run dev -- --host localhost --port 8080
