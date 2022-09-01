@@ -81,7 +81,6 @@ def read_markdown_tags(file: TextIOWrapper, revert_position=False):
     )[:5] # first 5 only
 
     tags = [word for word, count in most_common_5]
-    print(tags)
     
     if revert_position:
         file.seek(initial_position)
