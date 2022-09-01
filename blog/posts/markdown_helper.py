@@ -61,8 +61,11 @@ def read_markdown_tags(file: TextIOWrapper, revert_position=False):
     
     # read and lower all words because 'This' should be the same as 'this'
     words = file.read().lower()
-    # remove all non alpha characters excluding space, \n, and "'" (because you'd won't ...)
-    words = re.sub(r"[^a-z'\s]", "", words)
+    # remove all html tags
+    # and remove all non alpha characters excluding space, \n, and "'" (because... you'd won't ...)
+    # replace with space to avoid bug where '**word1**<div>word2</div>' becomes 'word1word2'
+    # instead the result will be '  word1   word2 ', the whitespace will be removed when split
+    words = re.sub(r"(<[^<]+?>)|[^a-z'’\s]", " ", words)
     words_split = words.split()
     # use Counter to count the number of duplicates in the list
     word_count = Counter(words_split)
@@ -78,6 +81,7 @@ def read_markdown_tags(file: TextIOWrapper, revert_position=False):
     )[:5] # first 5 only
 
     tags = [word for word, count in most_common_5]
+    print(tags)
     
     if revert_position:
         file.seek(initial_position)
